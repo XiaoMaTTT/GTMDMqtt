@@ -22,24 +22,28 @@ public class Connect implements BaseMessageHandler {
     public void process(ChannelHandlerContext ctx, MqttMessage message) {
         this.ctx = ctx;
         MqttConnectMessage msg = (MqttConnectMessage) message;
+
         MqttConnectVariableHeader variableHeader = msg.variableHeader();
-        //先列出可变头中的数据
-
         MqttConnectPayload payload = msg.payload();
-
-        //再列出payload中的数据
-
         String clientId = payload.clientIdentifier();
-        if (!Optional.ofNullable(clientId).isPresent()){
-            //生成一个唯一的clientId
-        }
+
         final String username = payload.userName();
         final byte[] password = payload.passwordInBytes();
-        log.trace("process connect message. ClientID:{} ,username:{}",clientId, username);
 
+//        if (authService(username,password)){//auth验证
+//            refuseConnect(MqttConnectReturnCode.CONNECTION_REFUSED_BAD_USER_NAME_OR_PASSWORD);
+//            return;
+//        }
 
-        if (true){
+        if (!isSupportVersion(variableHeader.version())){
+            refuseConnect(MqttConnectReturnCode.CONNECTION_REFUSED_UNACCEPTABLE_PROTOCOL_VERSION);
+            return;
+        }
+
+//        if (isAllowNullClientId){}后续可以加一个配置项，是否允许空的clientId，如果允许，就生成一个唯一的clientId
+        if (clientId == null || clientId.length() == 0){
             refuseConnect(MqttConnectReturnCode.CONNECTION_REFUSED_IDENTIFIER_REJECTED);
+            return;
         }
 
 //        boolean isSessionAlreadyPresent = !msgCleanSessionFlag && result.alreadyStored;
@@ -56,5 +60,10 @@ public class Connect implements BaseMessageHandler {
                 .returnCode(code)
                 .sessionPresent(false).build();
         ctx.writeAndFlush(refuseProto);
+    }
+
+    private boolean isSupportVersion(int version){
+        return (version == MqttVersion.MQTT_3_1.protocolLevel()) ||
+                (version == MqttVersion.MQTT_3_1_1.protocolLevel());
     }
 }
