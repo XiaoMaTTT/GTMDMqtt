@@ -1,15 +1,15 @@
 package com.gtmd.mqtt.handler;
 
 import com.gtmd.mqtt.handler.protos.Connect;
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.mqtt.MqttMessage;
 import io.netty.handler.codec.mqtt.MqttMessageType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MessageHandler {
 
-    private Logger log = LoggerFactory.getLogger(MessageHandler.class);
+    private final Logger log = LoggerFactory.getLogger(MessageHandler.class);
 
     void messageProcess(ChannelHandlerContext ctx, MqttMessage msg){
         MqttMessageType type = msg.fixedHeader().messageType();
