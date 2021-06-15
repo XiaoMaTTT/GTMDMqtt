@@ -6,6 +6,9 @@ import io.netty.handler.codec.mqtt.MqttMessage;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 
+/**
+ * @author admin
+ */
 public class BrokerHandler extends ChannelInboundHandlerAdapter {
 
     @Override

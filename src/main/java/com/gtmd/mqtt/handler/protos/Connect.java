@@ -2,13 +2,13 @@ package com.gtmd.mqtt.handler.protos;
 
 import com.gtmd.mqtt.service.Session;
 import com.gtmd.mqtt.service.SessionService;
+import com.gtmd.mqtt.service.impl.SessionServiceImpl;
 import io.netty.buffer.Unpooled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.mqtt.*;
 
-import java.util.Optional;
 
 import static io.netty.handler.codec.mqtt.MqttConnectReturnCode.CONNECTION_ACCEPTED;
 
@@ -19,7 +19,7 @@ public class Connect implements BaseMessageHandler {
 
     private final Logger log = LoggerFactory.getLogger(Connect.class);
 
-    private final SessionService sessionService = new SessionService();
+    private final SessionService sessionService = new SessionServiceImpl();
 
     private ChannelHandlerContext ctx;
 
